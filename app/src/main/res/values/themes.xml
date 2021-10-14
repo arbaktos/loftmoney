@@ -1,0 +1,41 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.LoftMoney" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <item name="editTextStyle">@style/CustomEditText</item>
+    </style>
+
+    <style name="CustomEditText" parent="@android:style/Widget.EditText">
+        <item name="android:layout_marginStart">@dimen/editTextMargin</item>
+        <item name="android:layout_marginEnd">@dimen/editTextMargin</item>
+        <item name="android:fontFamily">"sans-serif-regular"</item>
+        <item name="android:textSize">@dimen/editTextSize</item>
+        <item name="android:textColorHint">@color/editTextColor</item>
+        <item name="android:textColor">@color/editTextColor</item>
+        <item name="backgroundTint">@color/inactive_text</item>
+        <item name="android:textCursorDrawable">@null</item>
+    </style>
+
+    <style name="InactiveButtonStyle" parent="android:style/Widget.Button">
+        <item name="colorAccent">@android:color/white</item>
+        <item name="android:fontFamily">"sans-serif-medium"</item>
+        <item name="android:textColor">@color/inactive_text</item>
+        <item name="android:textSize">@dimen/button_text</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:backgroundTint">@android:color/white</item>
+        <item name="android:drawableTint">@color/inactive_text</item>
+        <item name="android:stateListAnimator">@null</item>
+        <item name="android:paddingStart">17dp</item>
+        <item name="android:paddingEnd">18dp</item>
+    </style>
+</resources>

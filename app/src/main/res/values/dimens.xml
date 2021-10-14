@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="editTextMargin">32dp</dimen>
+    <dimen name="editTextSize">24sp</dimen>
+    <dimen name="margin_side_button">112dp</dimen>
+    <dimen name="button_text">14sp</dimen>
+
+</resources>
