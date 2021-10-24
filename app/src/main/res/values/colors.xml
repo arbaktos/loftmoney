@@ -9,4 +9,11 @@
     <color name="white">#FFFFFFFF</color>
     <color name="editTextColor">#3574FA</color>
     <color name="inactive_text">#E3E3E3</color>
+    <color name="tv_price_color">#4A90E2</color>
+    <color name="tv_item_color">#666664</color>
+    <color name="colorIndicator">#FFC107</color>
+    <color name="colorActive">@android:color/white</color>
+    <color name="colorInactive">#708BAAEF</color>
+    <color name="tabBack">#3574FA</color>
+    <color name="incomeColor">#7ED321</color>
 </resources>

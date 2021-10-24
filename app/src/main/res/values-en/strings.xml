@@ -4,4 +4,7 @@
     <string name="expense">Expense</string>
     <string name="expense_name">Title</string>
     <string name="add_button">Add</string>
+    <string name="expenses">expenses</string>
+    <string name="incomes">incomes</string>
+    <string name="balance">balance</string>
 </resources>

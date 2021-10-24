@@ -3,4 +3,14 @@
     <string name="expense">Расход</string>
     <string name="expense_name">Название</string>
     <string name="add_button">добавить</string>
+    <string name="expenses">расходы</string>
+    <string name="incomes">доходы</string>
+    <string name="balance">Баланс</string>
+    <array name="main_pager_titles">
+        <item>@string/expenses</item>
+        <item>@string/incomes</item>
+        <item>@string/balance</item>
+    </array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

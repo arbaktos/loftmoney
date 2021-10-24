@@ -1,8 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.LoftMoney" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.LoftMoney" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimary">#3574FA</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
@@ -30,12 +30,20 @@
         <item name="colorAccent">@android:color/white</item>
         <item name="android:fontFamily">"sans-serif-medium"</item>
         <item name="android:textColor">@color/inactive_text</item>
-        <item name="android:textSize">@dimen/button_text</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:backgroundTint">@android:color/white</item>
         <item name="android:drawableTint">@color/inactive_text</item>
         <item name="android:stateListAnimator">@null</item>
         <item name="android:paddingStart">17dp</item>
         <item name="android:paddingEnd">18dp</item>
+    </style>
+
+    <style name="ItemListTextView" parent="@android:style/Widget.TextView">
+        <item name="android:fontFamily">"sans-serif-medium"</item>
+        <item name="android:layout_marginStart">24dp</item>
+        <item name="android:layout_marginEnd">24dp</item>
+        <item name="android:layout_marginTop">29dp</item>
+        <item name="android:layout_marginBottom">29dp</item>
+        <item name="android:textSize">@dimen/tv_textsize</item>
     </style>
 </resources>
