@@ -10,15 +10,15 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.example.loftmoney.LoftApp;
 import com.example.loftmoney.model.Item;
 import com.example.loftmoney.R;
+import com.example.loftmoney.remote.ItemRemote;
 import com.example.loftmoney.ui.additem.AddItemActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -26,11 +26,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 public class BudgetFragment extends Fragment implements BudgetClickAdapter{
-    Item.ExpenseType type;
+    Item.ItemType type;
     public ItemsAdapter adapter = new ItemsAdapter();
     public static final int LAUNCH_ADD_ITEM = 1;
     List<Item> items = new ArrayList<Item>();
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     public BudgetFragment() {
         // Required empty public constructor
@@ -52,8 +58,6 @@ public class BudgetFragment extends Fragment implements BudgetClickAdapter{
                 Item inputItem = data.getParcelableExtra("item");
                 items.add(inputItem);
                 adapter.setItems(items, type);
-            } else {
-                generateItems();
             }
         } catch (Exception ex) {
             Toast.makeText(getContext(), ex.toString(),
@@ -66,11 +70,11 @@ public class BudgetFragment extends Fragment implements BudgetClickAdapter{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         if (getArguments() != null) {
-            String typeStr = getArguments().getString("type");
-            if(typeStr != null) {
-                type = Item.ExpenseType.valueOf(typeStr.toUpperCase(Locale.ROOT));
+            Item.ItemType typeInput = (Item.ItemType) getArguments().getSerializable("type");
+            if(typeInput != null) {
+                type = typeInput;
             } else {
-                type = Item.ExpenseType.EXPENSE;
+                type = Item.ItemType.EXPENSE;
             }
 
         }
@@ -95,17 +99,32 @@ public class BudgetFragment extends Fragment implements BudgetClickAdapter{
                 onBackgroundClick();
             }
         });
-        generateItems();
 
     }
 
     @NonNull
-    private void generateItems() {
-
-        items.add(new Item("mode", "800", Item.ExpenseType.EXPENSE));
-        items.add(new Item("done", "3", Item.ExpenseType.INCOME));
-        items.add(new Item("post", "60", Item.ExpenseType.EXPENSE));
-        adapter.setItems(items, type);
+    private void generateItems(Item.ItemType type) {
+        Disposable disposable = ((LoftApp) getActivity().getApplication()).moneyApi.getMoneyItems(type.name().toLowerCase(Locale.ROOT))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(itemResponse -> {
+                    if (itemResponse.getStatus().equals("success")) {
+                        for (ItemRemote itemRemote: itemResponse.getItemsList()) {
+                            items.add(Item.getInstance(itemRemote));
+                        }
+                        adapter.setItems(items, type);
+                    } else {
+                        Toast.makeText(getContext(), getString(R.string.connection_lost), Toast.LENGTH_LONG).show();
+                    }
+                }, throwable -> {
+                    Toast.makeText(getContext(),throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                });
+        compositeDisposable.add(disposable);
+//
+//        items.add(new Item("mode", "800", Item.ItemType.EXPENSE));
+//        items.add(new Item("done", "3", Item.ItemType.INCOME));
+//        items.add(new Item("post", "60", Item.ItemType.EXPENSE));
+//        adapter.setItems(items, type);
     }
 
     @Override
@@ -114,5 +133,11 @@ public class BudgetFragment extends Fragment implements BudgetClickAdapter{
         Intent intent = new Intent(getActivity(), AddItemActivity.class);
         //startActivity(intent);
         startActivityForResult(intent, LAUNCH_ADD_ITEM);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        compositeDisposable.dispose();
     }
 }

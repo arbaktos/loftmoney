@@ -3,14 +3,23 @@ package com.example.loftmoney.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.loftmoney.remote.ItemRemote;
+
 public class Item implements Parcelable {
     private String name;
     private String price;
-    private ExpenseType type;
+    private ItemType type;
+
+    public static Item getInstance(ItemRemote itemRemote) {
+        return new Item(
+                itemRemote.getName(),
+                String.valueOf(itemRemote.getPrice()),
+                Item.ItemType.valueOf(itemRemote.getType()));
+    }
 
 
 
-    public Item(String name, String price, ExpenseType type) {
+    public Item(String name, String price, ItemType type) {
         this.name = name;
         this.price = price;
         this.type = type;
@@ -19,7 +28,7 @@ public class Item implements Parcelable {
     protected Item(Parcel in) {
         name = in.readString();
         price = in.readString();
-        type = ExpenseType.valueOf(in.readString());
+        type = ItemType.valueOf(in.readString());
     }
 
     @Override
@@ -57,11 +66,11 @@ public class Item implements Parcelable {
         this.price = price;
     }
 
-    public ExpenseType getType() {
+    public ItemType getType() {
         return type;
     }
 
-    public void setType(ExpenseType type) {
+    public void setType(ItemType type) {
         this.type = type;
     }
 
@@ -70,7 +79,7 @@ public class Item implements Parcelable {
         return 0;
     }
 
-    public enum ExpenseType {
+    public enum ItemType {
         EXPENSE, INCOME;
     }
 }

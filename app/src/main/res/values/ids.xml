@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="connection_lost" type="id">Did not succeeed in establishing connection</item>
+</resources>

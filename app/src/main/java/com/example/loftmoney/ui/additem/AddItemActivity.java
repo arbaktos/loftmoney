@@ -14,9 +14,6 @@ import com.example.loftmoney.MainActivity;
 import com.example.loftmoney.model.Item;
 import com.example.loftmoney.R;
 import com.example.loftmoney.navigation.AppRouter;
-import com.example.loftmoney.ui.fragments.budget.BudgetFragment;
-
-import java.util.ArrayList;
 
 public class AddItemActivity extends AppCompatActivity implements AddItemOnClickAdapter, AppRouter {
     private Button btnAdd;
@@ -35,7 +32,7 @@ public class AddItemActivity extends AppCompatActivity implements AddItemOnClick
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Item newItem = new Item(etName.getText().toString(), etPrice.getText().toString(), Item.ExpenseType.EXPENSE);
+                Item newItem = new Item(etName.getText().toString(), etPrice.getText().toString(), Item.ItemType.EXPENSE);
                     onAddClick(newItem);
             }
         });
@@ -45,7 +42,7 @@ public class AddItemActivity extends AppCompatActivity implements AddItemOnClick
     public void onAddClick(Item item) {
         Intent resultIntent = new Intent();
         setResult(Activity.RESULT_OK, resultIntent.putExtra("item", item));
-//        routeTo(new BudgetFragment());
+        finish();
     }
 
     @Override
@@ -56,6 +53,5 @@ public class AddItemActivity extends AppCompatActivity implements AddItemOnClick
 //                .commit();
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
-
     }
 }

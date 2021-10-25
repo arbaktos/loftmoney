@@ -1,10 +1,6 @@
 package com.example.loftmoney.ui.fragments.budget;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +24,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
         return items;
     }
 
-    public void setItems(List<Item> items, Item.ExpenseType type) {
+    public void setItems(List<Item> items, Item.ItemType type) {
         ArrayList<Item> filteredItems = new ArrayList();
         for (int i = 0; i < items.size(); i++) {
             if (items.get(i).getType() == type) {
@@ -76,7 +72,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
         public void bind(Item item){
             name.setText(item.getName());
             price.setText(item.getPrice());
-            if (item.getType().equals(Item.ExpenseType.INCOME)) {
+            if (item.getType().equals(Item.ItemType.INCOME)) {
                 int color = itemView.getResources().getColor(R.color.incomeColor);
                 price.setTextColor(color);
             }
