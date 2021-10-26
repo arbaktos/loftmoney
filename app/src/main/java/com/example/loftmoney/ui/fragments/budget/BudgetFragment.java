@@ -26,10 +26,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+
 
 public class BudgetFragment extends Fragment implements BudgetClickAdapter{
     Item.ItemType type;
@@ -84,26 +85,29 @@ public class BudgetFragment extends Fragment implements BudgetClickAdapter{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        RecyclerView recyclerView = view.findViewById(R.id.recycler);
-        FloatingActionButton addFab = view.findViewById(R.id.budget_fab);
+        setupFab(view);
+        configureRecyclerView(view);
+        getItems();
+    }
 
+    private void setupFab(View view) {
+        FloatingActionButton addFab = view.findViewById(R.id.budget_fab);
+        addFab.setOnClickListener(v -> onBackgroundClick());
+    }
+
+    private void configureRecyclerView(View view) {
+        RecyclerView recyclerView = view.findViewById(R.id.recycler);
         recyclerView.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 layoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
-        addFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackgroundClick();
-            }
-        });
-
     }
 
+
     @NonNull
-    private void generateItems(Item.ItemType type) {
+    private void getItems() {
         Disposable disposable = ((LoftApp) getActivity().getApplication()).moneyApi.getMoneyItems(type.name().toLowerCase(Locale.ROOT))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import com.example.loftmoney.remote.ItemRemote;
 
+import java.util.Locale;
+
 public class Item implements Parcelable {
     private String name;
     private String price;
@@ -14,7 +16,7 @@ public class Item implements Parcelable {
         return new Item(
                 itemRemote.getName(),
                 String.valueOf(itemRemote.getPrice()),
-                Item.ItemType.valueOf(itemRemote.getType()));
+                Item.ItemType.valueOf(itemRemote.getType().toUpperCase(Locale.ROOT)));
     }
 
 
