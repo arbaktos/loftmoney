@@ -19,8 +19,6 @@ public class Item implements Parcelable {
                 Item.ItemType.valueOf(itemRemote.getType().toUpperCase(Locale.ROOT)));
     }
 
-
-
     public Item(String name, String price, ItemType type) {
         this.name = name;
         this.price = price;

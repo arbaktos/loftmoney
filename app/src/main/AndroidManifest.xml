@@ -13,6 +13,8 @@
         android:theme="@style/Theme.LoftMoney">
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Toolbar"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

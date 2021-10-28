@@ -3,8 +3,8 @@
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
+    <color name="colorAccent">#FF9E57</color>
+    <color name="colorPrimaryDark">#05000000</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="editTextColor">#3574FA</color>
@@ -14,6 +14,7 @@
     <color name="colorIndicator">#FFC107</color>
     <color name="colorActive">@android:color/white</color>
     <color name="colorInactive">#708BAAEF</color>
-    <color name="tabBack">#3574FA</color>
+    <color name="expenseColor">#3574FA</color>
     <color name="incomeColor">#7ED321</color>
+    <color name="colorPrimary">#3574FA</color>
 </resources>

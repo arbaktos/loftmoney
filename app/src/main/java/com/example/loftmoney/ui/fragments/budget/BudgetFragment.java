@@ -29,11 +29,13 @@ import java.util.Locale;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 
-public class BudgetFragment extends Fragment implements BudgetClickAdapter{
-    Item.ItemType type;
+public class BudgetFragment extends Fragment {
+    public Item.ItemType type;
     public ItemsAdapter adapter = new ItemsAdapter();
     public static final int LAUNCH_ADD_ITEM = 1;
     List<Item> items = new ArrayList<Item>();
@@ -48,24 +50,6 @@ public class BudgetFragment extends Fragment implements BudgetClickAdapter{
         super.onCreate(savedInstanceState);
 
     }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        try {
-            super.onActivityResult(requestCode, resultCode, data);
-
-            if (requestCode == LAUNCH_ADD_ITEM  && resultCode  == -1) {
-                assert data != null;
-                Item inputItem = data.getParcelableExtra("item");
-                items.add(inputItem);
-                adapter.setItems(items, type);
-            }
-        } catch (Exception ex) {
-            Toast.makeText(getContext(), ex.toString(),
-                    Toast.LENGTH_SHORT).show();
-        }
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -85,14 +69,46 @@ public class BudgetFragment extends Fragment implements BudgetClickAdapter{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setupFab(view);
         configureRecyclerView(view);
-        getItems();
+        loadItems();
     }
 
-    private void setupFab(View view) {
-        FloatingActionButton addFab = view.findViewById(R.id.budget_fab);
-        addFab.setOnClickListener(v -> onBackgroundClick());
+    public Item.ItemType getType() {
+        return type;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        try {
+            super.onActivityResult(requestCode, resultCode, data);
+
+            if (requestCode == LAUNCH_ADD_ITEM  && resultCode  == -1) {
+                assert data != null;
+                Item inputItem = data.getParcelableExtra("item");
+                items.add(inputItem);
+                addItemToRemote(inputItem);
+                adapter.setItems(items, type);
+            }
+        } catch (Exception ex) {
+            Toast.makeText(getContext(), ex.toString(),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void addItemToRemote(Item inputItem) {
+        Disposable disposable = ((LoftApp) getActivity().getApplication()).moneyApi.addItem(
+                Integer.parseInt(inputItem.getPrice()), inputItem.getName(),
+                inputItem.getType().name().toLowerCase(Locale.ROOT))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {
+                    Toast.makeText(getContext(), getString(R.string.success_on_adding), Toast.LENGTH_SHORT).show();
+                }, throwable -> {
+                    Toast.makeText(getContext(), throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                });
+
+        compositeDisposable.add(disposable);
+
     }
 
     private void configureRecyclerView(View view) {
@@ -105,9 +121,8 @@ public class BudgetFragment extends Fragment implements BudgetClickAdapter{
         recyclerView.addItemDecoration(dividerItemDecoration);
     }
 
-
     @NonNull
-    private void getItems() {
+    private void loadItems() {
         Disposable disposable = ((LoftApp) getActivity().getApplication()).moneyApi.getMoneyItems(type.name().toLowerCase(Locale.ROOT))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -124,19 +139,6 @@ public class BudgetFragment extends Fragment implements BudgetClickAdapter{
                     Toast.makeText(getContext(),throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                 });
         compositeDisposable.add(disposable);
-//
-//        items.add(new Item("mode", "800", Item.ItemType.EXPENSE));
-//        items.add(new Item("done", "3", Item.ItemType.INCOME));
-//        items.add(new Item("post", "60", Item.ItemType.EXPENSE));
-//        adapter.setItems(items, type);
-    }
-
-    @Override
-    public void onBackgroundClick() {
-
-        Intent intent = new Intent(getActivity(), AddItemActivity.class);
-        //startActivity(intent);
-        startActivityForResult(intent, LAUNCH_ADD_ITEM);
     }
 
     @Override

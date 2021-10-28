@@ -12,4 +12,6 @@
         <item>@string/balance</item>
     </array>
     <string name="connection_lost">Извините, мы не можем загрузить данные ваших расходов</string>
+    <string name="fileds_are_empty">Заполните все поля</string>
+    <string name="success_on_adding">Successfully added</string>
 </resources>
