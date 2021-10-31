@@ -1,14 +1,17 @@
-package com.example.loftmoney.ui.fragments.budget;
+package com.example.loftmoney.screens.budget;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,28 +21,23 @@ import android.widget.Toast;
 import com.example.loftmoney.LoftApp;
 import com.example.loftmoney.model.Item;
 import com.example.loftmoney.R;
-import com.example.loftmoney.remote.ItemRemote;
-import com.example.loftmoney.ui.additem.AddItemActivity;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.example.loftmoney.remote.MoneyApi;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 
 public class BudgetFragment extends Fragment {
+
+    private BudgetViewModel budgetViewModel;
+    private MoneyApi moneyApi;
     public Item.ItemType type;
-    public ItemsAdapter adapter = new ItemsAdapter();
-    public static final int LAUNCH_ADD_ITEM = 1;
-    List<Item> items = new ArrayList<Item>();
+    public ItemsAdapter adapter;
+//    private final List<Item> items = new ArrayList<Item>();
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private SwipeRefreshLayout swipeRefreshLayout;
+    SharedPreferences sharedPreferences;
+
+    public static final int LAUNCH_ADD_ITEM = 1;
 
     public BudgetFragment() {
         // Required empty public constructor
@@ -48,7 +46,6 @@ public class BudgetFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,12 +66,38 @@ public class BudgetFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        moneyApi = ((LoftApp) getActivity().getApplication()).moneyApi;
+        sharedPreferences = getActivity().getSharedPreferences(getString(R.string.app_name), 0);
+        configureViewModel();
         configureRecyclerView(view);
-        loadItems();
+        configureSwipeRefreshLayout();
+        budgetViewModel.loadItems(moneyApi, type, sharedPreferences);
     }
 
-    public Item.ItemType getType() {
-        return type;
+    @Override
+    public void onResume() {
+
+        super.onResume();
+    }
+
+    private void configureViewModel() {
+        budgetViewModel = new ViewModelProvider(this).get(BudgetViewModel.class);
+        budgetViewModel.itemsLiveList.observe(getViewLifecycleOwner(), items -> {
+            adapter.setItems(items, type);
+        });
+        budgetViewModel.messageString.observe(getViewLifecycleOwner(), this::showToast);
+        budgetViewModel.messageInt.observe(getViewLifecycleOwner(), message ->
+                showToast(getString(message)));
+    }
+
+    private void configureSwipeRefreshLayout() {
+        budgetViewModel.toRefresh.observe(getViewLifecycleOwner(), toDo -> {
+            if (toDo != null) swipeRefreshLayout.setRefreshing(toDo);
+        });
+        swipeRefreshLayout = getView().findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            budgetViewModel.loadItems(moneyApi, type, sharedPreferences);
+        });
     }
 
     @Override
@@ -85,9 +108,9 @@ public class BudgetFragment extends Fragment {
             if (requestCode == LAUNCH_ADD_ITEM  && resultCode  == -1) {
                 assert data != null;
                 Item inputItem = data.getParcelableExtra("item");
-                items.add(inputItem);
-                addItemToRemote(inputItem);
-                adapter.setItems(items, type);
+                adapter.addItem(inputItem);
+                budgetViewModel.addItemToRemote(inputItem, moneyApi);
+                adapter.setItems(adapter.getItems(), type);
             }
         } catch (Exception ex) {
             Toast.makeText(getContext(), ex.toString(),
@@ -95,23 +118,8 @@ public class BudgetFragment extends Fragment {
         }
     }
 
-    private void addItemToRemote(Item inputItem) {
-        Disposable disposable = ((LoftApp) getActivity().getApplication()).moneyApi.addItem(
-                Integer.parseInt(inputItem.getPrice()), inputItem.getName(),
-                inputItem.getType().name().toLowerCase(Locale.ROOT))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> {
-                    Toast.makeText(getContext(), getString(R.string.success_on_adding), Toast.LENGTH_SHORT).show();
-                }, throwable -> {
-                    Toast.makeText(getContext(), throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                });
-
-        compositeDisposable.add(disposable);
-
-    }
-
     private void configureRecyclerView(View view) {
+        adapter = new ItemsAdapter();
         RecyclerView recyclerView = view.findViewById(R.id.recycler);
         recyclerView.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
@@ -121,29 +129,7 @@ public class BudgetFragment extends Fragment {
         recyclerView.addItemDecoration(dividerItemDecoration);
     }
 
-    @NonNull
-    private void loadItems() {
-        Disposable disposable = ((LoftApp) getActivity().getApplication()).moneyApi.getMoneyItems(type.name().toLowerCase(Locale.ROOT))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(itemResponse -> {
-                    if (itemResponse.getStatus().equals("success")) {
-                        for (ItemRemote itemRemote: itemResponse.getItemsList()) {
-                            items.add(Item.getInstance(itemRemote));
-                        }
-                        adapter.setItems(items, type);
-                    } else {
-                        Toast.makeText(getContext(), getString(R.string.connection_lost), Toast.LENGTH_LONG).show();
-                    }
-                }, throwable -> {
-                    Toast.makeText(getContext(),throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                });
-        compositeDisposable.add(disposable);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        compositeDisposable.dispose();
+    public void showToast(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 }

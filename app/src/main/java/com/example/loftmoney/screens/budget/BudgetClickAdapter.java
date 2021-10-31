@@ -1,4 +1,4 @@
-package com.example.loftmoney.ui.fragments.budget;
+package com.example.loftmoney.screens.budget;
 
 public interface BudgetClickAdapter {
 

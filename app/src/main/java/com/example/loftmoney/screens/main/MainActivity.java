@@ -1,15 +1,16 @@
-package com.example.loftmoney;
+package com.example.loftmoney.screens.main;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.loftmoney.ui.additem.AddItemActivity;
-import com.example.loftmoney.ui.fragments.budget.BudgetClickAdapter;
-import com.example.loftmoney.ui.fragments.budget.BudgetFragment;
+import com.example.loftmoney.R;
+import com.example.loftmoney.screens.additem.AddItemActivity;
+import com.example.loftmoney.screens.budget.BudgetClickAdapter;
+import com.example.loftmoney.screens.budget.BudgetFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -25,7 +26,10 @@ public class MainActivity extends AppCompatActivity implements BudgetClickAdapte
         setContentView(R.layout.activity_main);
         setupFab();
         setupTabs();
+
     }
+
+
 
     private void setupTabs() {
         TabLayout tabs = findViewById(R.id.tabs);

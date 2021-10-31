@@ -1,4 +1,4 @@
-package com.example.loftmoney.ui.fragments.budget;
+package com.example.loftmoney.screens.budget;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,12 +13,11 @@ import com.example.loftmoney.model.Item;
 import com.example.loftmoney.R;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
 
-    private List<Item> items = Collections.emptyList();
+    private List<Item> items = new ArrayList<Item>();
 
     public List<Item> getItems() {
         return items;
@@ -34,6 +33,15 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
         }
 
         this.items = filteredItems;
+        notifyDataSetChanged();
+    }
+
+    public void addItem(Item item) {
+        items.add(item);
+    }
+
+    public void clearItems() {
+        items.clear();
         notifyDataSetChanged();
     }
 

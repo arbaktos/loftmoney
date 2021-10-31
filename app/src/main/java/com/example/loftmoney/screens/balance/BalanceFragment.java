@@ -1,4 +1,4 @@
-package com.example.loftmoney.ui.fragments.balance;
+package com.example.loftmoney.screens.balance;
 
 import android.os.Bundle;
 

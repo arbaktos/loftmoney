@@ -14,4 +14,8 @@
     <string name="connection_lost">Извините, мы не можем загрузить данные ваших расходов</string>
     <string name="fileds_are_empty">Заполните все поля</string>
     <string name="success_on_adding">Successfully added</string>
+    <string name="activity_main_toolbar_title">Учёт бюджета</string>
+    <string name="login">Войти</string>
+    <string name="clien_secret" translatable="false">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</string>
+    <string name="clien_id" translatable="false">651295103963-om4mhhiqke527h2muj96qaplglbje2us.apps.googleusercontent.com</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.loftmoney.ui.additem;
+package com.example.loftmoney.screens.additem;
 
 import com.example.loftmoney.model.Item;
 

@@ -1,25 +1,20 @@
-package com.example.loftmoney.ui.additem;
+package com.example.loftmoney.screens.additem;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.loftmoney.MainActivity;
 import com.example.loftmoney.model.Item;
 import com.example.loftmoney.R;
-import com.example.loftmoney.navigation.AppRouter;
 
 public class AddItemActivity extends AppCompatActivity implements AddItemOnClickAdapter {
     private TextView etName;

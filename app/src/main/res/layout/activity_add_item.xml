@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.additem.AddItemActivity">
+    tools:context=".screens.additem.AddItemActivity">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/ti_expense"

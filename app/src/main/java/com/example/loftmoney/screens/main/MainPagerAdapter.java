@@ -1,4 +1,4 @@
-package com.example.loftmoney;
+package com.example.loftmoney.screens.main;
 
 import android.os.Bundle;
 
@@ -8,8 +8,8 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.loftmoney.model.Item;
-import com.example.loftmoney.ui.fragments.balance.BalanceFragment;
-import com.example.loftmoney.ui.fragments.budget.BudgetFragment;
+import com.example.loftmoney.screens.balance.BalanceFragment;
+import com.example.loftmoney.screens.budget.BudgetFragment;
 
 public class MainPagerAdapter extends FragmentStateAdapter {
     private final Item.ItemType[] types = {Item.ItemType.EXPENSE, Item.ItemType.INCOME};
