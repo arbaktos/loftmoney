@@ -25,9 +25,11 @@ public class LoginViewModel extends ViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(authResponse -> {
                     authToken.postValue(authResponse.getAuthToken());
+
                 }, throwable -> {
                     messageString.postValue(throwable.getLocalizedMessage());
 //                    Log.d("debug", messageString.getValue());
+                    Log.d("debug", authToken.getValue().toString());
                 });
         compositeDisposable.add(disposable);
     }

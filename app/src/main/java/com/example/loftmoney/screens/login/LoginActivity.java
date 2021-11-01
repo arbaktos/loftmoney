@@ -3,6 +3,7 @@ package com.example.loftmoney.screens.login;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -55,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
             if (account != null) {
                 AuthApi authApi = ((LoftApp) getApplication()).authApi;
                 loginViewModel.makeLogin(authApi, account.getId());
+
             } else {
                 Log.w("debug", "can't parse account");
             }
@@ -85,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         loginViewModel.authToken.observe(this, token -> {
             if (!TextUtils.isEmpty(token)) {
-                SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.app_name), 0);
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);//getSharedPreferences(getString(R.string.app_name), 0);
                 sharedPreferences.edit().putString(LoftApp.AUTH_KEY, token).apply();
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
