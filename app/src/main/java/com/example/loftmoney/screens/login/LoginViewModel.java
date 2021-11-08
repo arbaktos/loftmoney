@@ -26,10 +26,9 @@ public class LoginViewModel extends ViewModel {
                 .subscribe(authResponse -> {
                     authToken.postValue(authResponse.getAuthToken());
 
+                    Log.d("debug", authToken.getValue());
                 }, throwable -> {
                     messageString.postValue(throwable.getLocalizedMessage());
-//                    Log.d("debug", messageString.getValue());
-                    Log.d("debug", authToken.getValue().toString());
                 });
         compositeDisposable.add(disposable);
     }

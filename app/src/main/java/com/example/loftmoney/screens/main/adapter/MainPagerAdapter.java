@@ -1,4 +1,4 @@
-package com.example.loftmoney.screens.main;
+package com.example.loftmoney.screens.main.adapter;
 
 import android.os.Bundle;
 
@@ -11,29 +11,33 @@ import com.example.loftmoney.model.Item;
 import com.example.loftmoney.screens.balance.BalanceFragment;
 import com.example.loftmoney.screens.budget.BudgetFragment;
 
-public class MainPagerAdapter extends FragmentStateAdapter {
-    private final Item.ItemType[] types = {Item.ItemType.EXPENSE, Item.ItemType.INCOME};
+import java.util.List;
 
-    public MainPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
+public class MainPagerAdapter extends FragmentStateAdapter {
+    private final List<FragmentItem> fragments;
+    private final int behavior;
+
+    public MainPagerAdapter(List<FragmentItem> fragments, @NonNull FragmentActivity fragmentActivity, int behavior) {
         super(fragmentActivity);
+        this.fragments = fragments;
+        this.behavior = behavior;
     }
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-
-        if (position != 2) {
+        Fragment fragment = fragments.get(position).getFragment();
+        if (fragments.get(position).getType() != null) {
             Bundle args = new Bundle();
-            args.putSerializable("type",types[position]);
-            final BudgetFragment budgetFragment = new BudgetFragment();
-            budgetFragment.setArguments(args);
-            return budgetFragment;
+            args.putSerializable("type", fragments.get(position).getType());
+            fragment.setArguments(args);
         }
-        return new BalanceFragment();
+        return fragment;
     }
+
 
     @Override
     public int getItemCount() {
-        return 3;
+        return fragments.size();
     }
 }

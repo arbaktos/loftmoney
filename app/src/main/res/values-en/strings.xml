@@ -9,4 +9,9 @@
     <string name="balance">balance</string>
     <string name="connection_lost">Sorry, we can not load your money data</string>
     <string name="fileds_are_empty">Please fill in all price and name</string>
+    <string name="success_on_adding">Successfully added</string>
+    <string name="activity_main_toolbar_title">Budget</string>
+    <string name="login">Login</string>
+    <string name="message_deletion">Are you sure you want to delete these items?</string>
+    <string name="no">No</string>
 </resources>

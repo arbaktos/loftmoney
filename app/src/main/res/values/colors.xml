@@ -17,4 +17,10 @@
     <color name="expenseColor">#3574FA</color>
     <color name="incomeColor">#7ED321</color>
     <color name="colorPrimary">#3574FA</color>
+    <color name="editModeColor">#333F59</color>
+    <color name="bgColorEditMode">#EFEFEF</color>
+    <color name="bgEditModeColor">#333F59</color>
+    <color name="transparent">#00FFFFFF</color>
+    <color name="notSelected">#FAFAFA</color>
+
 </resources>

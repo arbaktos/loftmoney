@@ -11,6 +11,7 @@ public class Item implements Parcelable {
     private String name;
     private String price;
     private ItemType type;
+    private Boolean isSelected;
 
     public static Item getInstance(ItemRemote itemRemote) {
         return new Item(
@@ -23,6 +24,7 @@ public class Item implements Parcelable {
         this.name = name;
         this.price = price;
         this.type = type;
+        this.isSelected = false;
     }
 
     protected Item(Parcel in) {
@@ -77,6 +79,14 @@ public class Item implements Parcelable {
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    public Boolean getSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(Boolean selected) {
+        isSelected = selected;
     }
 
     public enum ItemType {

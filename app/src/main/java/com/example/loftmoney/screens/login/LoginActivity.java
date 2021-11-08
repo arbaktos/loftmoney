@@ -54,9 +54,10 @@ public class LoginActivity extends AppCompatActivity {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             if (account != null) {
-                AuthApi authApi = ((LoftApp) getApplication()).authApi;
-                loginViewModel.makeLogin(authApi, account.getId());
 
+//                AuthApi authApi = ((LoftApp) getApplication()).authApi;
+//                loginViewModel.makeLogin(authApi, account.getId());
+                loginViewModel.authToken.postValue(account.getId());
             } else {
                 Log.w("debug", "can't parse account");
             }

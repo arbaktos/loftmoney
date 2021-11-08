@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-
-
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,7 +14,7 @@
             android:layout_weight="0.5"
             android:layout_height="wrap_content"
             android:textColor="@color/tv_item_color"
-            android:text="Зубная щетка"
+            tools:text="Зубная щетка"
             android:textSize="20sp"/>
         <TextView
             android:id="@+id/tv_price"
