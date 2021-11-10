@@ -7,6 +7,8 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -91,6 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);//getSharedPreferences(getString(R.string.app_name), 0);
                 sharedPreferences.edit().putString(LoftApp.AUTH_KEY, token).apply();
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                fadeAnimation();
                 startActivity(intent);
                 finish();
             }
@@ -100,6 +103,12 @@ public class LoginActivity extends AppCompatActivity {
             if (!TextUtils.isEmpty(error))
             showToast(error);
         });
+    }
+
+    private void fadeAnimation() {
+        Animation fadeOut = new AlphaAnimation(1,0);
+        fadeOut.setDuration(1000);
+
     }
 
     public void showToast(String message) {

@@ -98,8 +98,10 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
                 int color = itemView.getResources().getColor(R.color.incomeColor);
                 price.setTextColor(color);
             }
-            itemView.setBackgroundColor(itemView.getResources().getColor(
-                    item.getSelected() ? R.color.bgColorEditMode : R.color.notSelected));
+            if (item.getSelected() != null) {
+                itemView.setBackgroundColor(itemView.getResources().getColor(
+                        item.getSelected() ? R.color.bgColorEditMode : R.color.notSelected));
+            }
 
             itemView.setOnLongClickListener(v -> {
                 if (budgetAdapterClick != null) {

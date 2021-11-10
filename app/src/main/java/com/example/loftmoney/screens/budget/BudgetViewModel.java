@@ -24,7 +24,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class BudgetViewModel extends AndroidViewModel {
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
     public MutableLiveData<List<Item>> itemsLiveList = new MutableLiveData<>(Collections.emptyList());
     public MutableLiveData<String> messageString = new MutableLiveData<>();
     public MutableLiveData<Integer> messageInt = new MutableLiveData<>();
@@ -36,13 +36,13 @@ public class BudgetViewModel extends AndroidViewModel {
         super(application);
     }
 
-    public void loadItems(MoneyApi moneyApi, Item.ItemType type, SharedPreferences sharedPreferences) {
+    public void loadItems(MoneyApi moneyApi, SharedPreferences sharedPreferences) {//deleted ItemType type
         ArrayList<Item> items = new ArrayList<>();
-        items.add( new Item("cat", "30", Item.ItemType.EXPENSE));
-        items.add( new Item("caterpillar", "750", Item.ItemType.EXPENSE));
-        items.add( new Item("creo", "4000", Item.ItemType.EXPENSE));
-        items.add( new Item("salary", "8390", Item.ItemType.INCOME));
-        items.add( new Item("dept", "156", Item.ItemType.INCOME));
+        items.add( new Item("cat", "30", Item.ItemType.EXPENSE, "1"));
+        items.add( new Item("caterpillar", "750", Item.ItemType.EXPENSE, "2"));
+        items.add( new Item("creo", "4000", Item.ItemType.EXPENSE, "3"));
+        items.add( new Item("salary", "8390", Item.ItemType.INCOME, "4"));
+        items.add( new Item("dept", "156", Item.ItemType.INCOME, "5"));
         itemsLiveList.postValue(items);
 //        String authToken = sharedPreferences.getString(LoftApp.AUTH_KEY, "");
 //        Disposable disposable = moneyApi.getMoneyItems(type.name().toLowerCase(Locale.ROOT))

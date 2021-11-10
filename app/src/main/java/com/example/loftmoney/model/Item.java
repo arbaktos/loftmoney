@@ -8,23 +8,30 @@ import com.example.loftmoney.remote.ItemRemote;
 import java.util.Locale;
 
 public class Item implements Parcelable {
+    private String id;
     private String name;
     private String price;
     private ItemType type;
     private Boolean isSelected;
 
+    public String getId() {
+        return id;
+    }
+
     public static Item getInstance(ItemRemote itemRemote) {
         return new Item(
                 itemRemote.getName(),
                 String.valueOf(itemRemote.getPrice()),
-                Item.ItemType.valueOf(itemRemote.getType().toUpperCase(Locale.ROOT)));
+                Item.ItemType.valueOf(itemRemote.getType().toUpperCase(Locale.ROOT)),
+                itemRemote.getId());
     }
 
-    public Item(String name, String price, ItemType type) {
+    public Item(String name, String price, ItemType type, String id) {
         this.name = name;
         this.price = price;
         this.type = type;
         this.isSelected = false;
+        this.id = id;
     }
 
     protected Item(Parcel in) {

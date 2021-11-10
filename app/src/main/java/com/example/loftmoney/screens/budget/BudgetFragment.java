@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,8 +94,8 @@ public class BudgetFragment extends Fragment implements ItemChoiceListener {
     }
 
     private void configureViewModel() {
-        budgetViewModel = new ViewModelProvider(this).get(BudgetViewModel.class);
-        budgetViewModel.loadItems(moneyApi, type, sharedPreferences);
+        budgetViewModel = new ViewModelProvider(requireActivity()).get(BudgetViewModel.class);
+        budgetViewModel.loadItems(moneyApi, sharedPreferences);
         budgetViewModel.itemsLiveList.observe(getViewLifecycleOwner(), items -> {
             adapter.setItems(items, type);
         });
@@ -121,7 +122,7 @@ public class BudgetFragment extends Fragment implements ItemChoiceListener {
         });
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            budgetViewModel.loadItems(moneyApi, type, sharedPreferences);
+            budgetViewModel.loadItems(moneyApi, sharedPreferences);
         });
     }
 
@@ -134,6 +135,9 @@ public class BudgetFragment extends Fragment implements ItemChoiceListener {
                 assert data != null;
                 Item inputItem = data.getParcelableExtra("item");
                 adapter.addItem(inputItem);// delete when api arrives
+                List<Item> items = budgetViewModel.itemsLiveList.getValue();
+                items.add(inputItem);
+                budgetViewModel.itemsLiveList.postValue(items);
                 budgetViewModel.addItemToRemote(inputItem, moneyApi);
             }
         } catch (Exception ex) {
@@ -157,7 +161,7 @@ public class BudgetFragment extends Fragment implements ItemChoiceListener {
         budgetViewModel.isEditMode.postValue(false);
         budgetViewModel.selectedItemCounter.postValue(0);
         for (Item item: budgetViewModel.itemsLiveList.getValue()) {
-            if (item.getSelected()) {
+            if (item.getSelected() != null && item.getSelected()) {
                 item.setSelected(false);
                 adapter.updateItem(item);
             }
@@ -169,6 +173,7 @@ public class BudgetFragment extends Fragment implements ItemChoiceListener {
         for (Item item: items) {
             if (item.getSelected()) {
                 itemToDelete.add(item);
+                moneyApi.deleteItem(item.getId());
             }
         }
         items.removeAll(itemToDelete);

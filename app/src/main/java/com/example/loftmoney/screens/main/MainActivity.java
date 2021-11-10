@@ -1,16 +1,23 @@
 package com.example.loftmoney.screens.main;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -46,7 +53,6 @@ public class MainActivity extends AppCompatActivity implements MainClickAdapter,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         setupFab();
         setupTabs();
         setupToolbar();
@@ -88,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements MainClickAdapter,
 
     private void setupTabs() {
         fragments = setupFragments();
+        int balanceFragmentPosition = 2;
         MainPagerAdapter adapter = new MainPagerAdapter(fragments, this, 0);//behavior?
 
         tabs = findViewById(R.id.tabs);
@@ -105,6 +112,11 @@ public class MainActivity extends AppCompatActivity implements MainClickAdapter,
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
+                if (position == balanceFragmentPosition) {
+                    addFab.hide();
+                } else {
+                    addFab.show();
+                }
                 onClearEdit();
             }
         });
@@ -143,6 +155,14 @@ public class MainActivity extends AppCompatActivity implements MainClickAdapter,
         backIcon.setVisibility(status ? View.VISIBLE : View.INVISIBLE);
         bucketIcon.setVisibility(status ? View.VISIBLE : View.INVISIBLE);
         addFab.setVisibility(status ? View.INVISIBLE : View.VISIBLE);
+
+        Window window = this.getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(
+                status? getResources().getColor(R.color.statusBarEditModeColor)
+                        : getResources().getColor(R.color.colorPrimary));
+
     }
 
     @Override
@@ -165,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements MainClickAdapter,
             BudgetFragment budgetFragment = (BudgetFragment) activeFragment;
             budgetFragment.onClearSelect();
         } else {
-            for (FragmentItem fragmentItem: fragments) {
+            for (FragmentItem fragmentItem : fragments) {
                 if (fragmentItem.getFragment() instanceof BudgetFragment) {
                     BudgetFragment budgetFragment = ((BudgetFragment) fragmentItem.getFragment());
                     budgetFragment.onClearSelect();

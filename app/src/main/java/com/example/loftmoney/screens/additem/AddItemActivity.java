@@ -92,7 +92,7 @@ public class AddItemActivity extends AppCompatActivity implements AddItemOnClick
             if (mName.equals("") || mPrice.equals("")) {
                 Toast.makeText(getApplicationContext(), getString(R.string.fileds_are_empty), Toast.LENGTH_LONG).show();
             } else {
-                Item newItem = new Item(mName, mPrice, type);
+                Item newItem = new Item(mName, mPrice, type, "0");
                 onAddClick(newItem);
             }
         });
