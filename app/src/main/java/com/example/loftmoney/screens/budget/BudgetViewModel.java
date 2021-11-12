@@ -12,6 +12,7 @@ import com.example.loftmoney.R;
 import com.example.loftmoney.model.Item;
 import com.example.loftmoney.remote.ItemRemote;
 import com.example.loftmoney.remote.MoneyApi;
+import com.example.loftmoney.remote.OnAddResponse;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,6 +22,7 @@ import java.util.Locale;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class BudgetViewModel extends AndroidViewModel {
@@ -71,13 +73,24 @@ public class BudgetViewModel extends AndroidViewModel {
                 )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> {
-                    messageInt.postValue(R.string.success_on_adding);
+                .subscribe(new Consumer<OnAddResponse>() {
+                               @Override
+                               public void accept(OnAddResponse onAddResponse) throws Exception {
+                                   if (onAddResponse.getStatus() == "success") {
+                                       for (Item item: itemsLiveList.getValue()) {
+                                           if (item == inputItem) {
+                                               item.setId(onAddResponse.getId());
+                                           }
+                                       }
+                                   }
+                               }
+//                        () -> {
+//                    messageInt.postValue(R.string.success_on_adding);
                 }, throwable -> {
                     messageString.postValue(throwable.getLocalizedMessage());
                 });
 
-        compositeDisposable.add(disposable);
+                        compositeDisposable.add(disposable);
     }
 
     public void countSelected() {

@@ -26,6 +26,10 @@ public class Item implements Parcelable {
                 itemRemote.getId());
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public Item(String name, String price, ItemType type, String id) {
         this.name = name;
         this.price = price;

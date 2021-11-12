@@ -20,7 +20,7 @@ public interface MoneyApi {
 
     @POST("items/add")
     @FormUrlEncoded
-    Completable addItem(@Field("price") int price, @Field("name") String name,
+    Single<OnAddResponse> addItem(@Field("price") int price, @Field("name") String name,
                         @Field("type") String type, @Field("auth-token") String authToken);
 
     @GET("./balance")
