@@ -11,7 +11,7 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_balance.xml" value="0.275" />
-        <entry key="app/src/main/res/layout/fragment_budget.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_budget.xml" value="0.25" />
         <entry key="app/src/main/res/xml/security_config.xml" value="0.1" />
       </map>
     </option>
